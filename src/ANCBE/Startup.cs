@@ -30,7 +30,7 @@ namespace ANCBE
 
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("The first words of ANCBE - Hello World!");
             });
         }
     }

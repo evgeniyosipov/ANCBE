@@ -28,9 +28,18 @@ namespace ANCBE
                 app.UseDeveloperExceptionPage();
             }
 
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("First! ");
+                await next();
+            });
+
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("The first words of ANCBE - Hello World!");
+                if (context.Request.Path.Value.StartsWith("/second"))
+                {
+                    await context.Response.WriteAsync("Second!");
+                }
             });
         }
     }

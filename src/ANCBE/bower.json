@@ -1,6 +1,7 @@
 {
 	"name": "ancbe",
 	"private": true,
-	"dependencies": {
-	}
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
 }

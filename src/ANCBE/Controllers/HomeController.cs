@@ -11,9 +11,9 @@ namespace ANCBE.Controllers
     public class HomeController : Controller
     {
         // GET: /<controller>/
-        public string Index()
+        public IActionResult Index()
         {
-            return "Hello from Home controller!";
+            return View();
         }
     }
 }

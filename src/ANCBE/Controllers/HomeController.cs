@@ -18,6 +18,10 @@ namespace ANCBE.Controllers
 
         public IActionResult Post(long id)
         {
+            ViewBag.Title = "Incredible Post";
+            ViewBag.Posted = DateTime.Now;
+            ViewBag.Auhor = "Evgeniy";
+            ViewBag.Body = "A lot of text. This is realy awesome post... with pictures and sounds. Believe me, this is the coolest post of all time ;)";
             return View();
         }
     }

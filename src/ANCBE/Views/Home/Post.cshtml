@@ -1,10 +1,5 @@
-﻿@model ANCBE.Models.Post
-@{ 
+﻿@{ 
     Layout = "_Layout";
 }
 
-          <div class="blog-post">
-            <h2 class="blog-post-title">@Model.Title</h2>
-            <p class="blog-post-meta">@Model.PostedDate by <a href="/">@Model.Auhor</a></p>
-              @Model.Body
-          </div><!-- /.blog-post -->   
+@Html.Partial("_Post")

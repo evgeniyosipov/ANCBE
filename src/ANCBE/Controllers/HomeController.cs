@@ -14,7 +14,28 @@ namespace ANCBE.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            return View();
+            var posts = new[] {
+                new Post {
+                    Title = "Blog Post Title #1",
+                    PostedDate = DateTime.Now,
+                    Author = "Evgeniy Osipov",
+                    Body = "Blog post content #1",
+                },
+                new Post {
+                    Title = "Blog Post Title #2",
+                    PostedDate = DateTime.Now,
+                    Author = "Evgeniy Osipov",
+                    Body = "Blog post content #2",
+                },
+                new Post {
+                    Title = "Blog Post Title #3",
+                    PostedDate = DateTime.Now,
+                    Author = "Evgeniy Osipov",
+                    Body = "Blog post content #3",
+                }
+            };
+
+            return View(posts);
         }
 
         public IActionResult Post(long id)
@@ -23,7 +44,7 @@ namespace ANCBE.Controllers
 
             post.Title = "Incredible Post";
             post.PostedDate = DateTime.Now;
-            post.Auhor = "Evgeniy";
+            post.Author = "Evgeniy Osipov";
             post.Body = "A lot of text. This is realy awesome post... with pictures and sounds. Believe me, this is the coolest post of all time ;)";
 
             return View(post);

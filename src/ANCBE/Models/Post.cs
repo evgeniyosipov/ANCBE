@@ -9,7 +9,7 @@ namespace ANCBE.Models
     {
         public string Title { get; set; }
         public DateTime PostedDate { get; set; }
-        public string Auhor { get; set; }
+        public string Author { get; set; }
         public string Body { get; set; }
     }
 }

@@ -37,17 +37,5 @@ namespace ANCBE.Controllers
 
             return View(posts);
         }
-
-        public IActionResult Post(long id)
-        {
-            Post post = new Post();
-
-            post.Title = "Incredible Post";
-            post.PostedDate = DateTime.Now;
-            post.Author = "Evgeniy Osipov";
-            post.Body = "A lot of text. This is realy awesome post... with pictures and sounds. Believe me, this is the coolest post of all time ;)";
-
-            return View(post);
-        }
     }
 }

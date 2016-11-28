@@ -24,15 +24,19 @@ namespace ANCBE.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(Post post)
+        public async Task<IActionResult> Create(Post post)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return View(post);
             }
 
             post.PostedDate = DateTime.Now;
             post.Author = User.Identity.Name;
+
+            BlogDataContext db = new BlogDataContext();
+            db.Posts.Add(post);
+            await db.SaveChangesAsync();
 
             return View();
         }

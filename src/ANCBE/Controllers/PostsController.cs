@@ -38,17 +38,14 @@ namespace ANCBE.Controllers
             db.Posts.Add(post);
             await db.SaveChangesAsync();
 
-            return View();
+            return RedirectToAction("Post", new { id = post.Id });
         }
 
         public IActionResult Post(long id)
         {
-            Post post = new Post();
+            BlogDataContext db = new BlogDataContext();
 
-            post.Title = "Incredible Post";
-            post.PostedDate = DateTime.Now;
-            post.Author = "Evgeniy Osipov";
-            post.Body = "A lot of text. This is realy awesome post... with pictures and sounds. Believe me, this is the coolest post of all time ;)";
+            Post post = db.Posts.SingleOrDefault(x => x.Id == id);
 
             return View(post);
         }

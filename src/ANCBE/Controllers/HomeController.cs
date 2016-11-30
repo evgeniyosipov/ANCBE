@@ -37,5 +37,15 @@ namespace ANCBE.Controllers
 
             return View(posts);
         }
+
+        public IActionResult Error()
+        {
+            return View();
+        }
+
+        public IActionResult CauseAnError()
+        {
+            throw new Exception("Error!");
+        }
     }
 }

@@ -28,6 +28,10 @@ namespace ANCBE
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/home/error");
+            }
 
             app.UseFileServer();
 

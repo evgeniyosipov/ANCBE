@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.UserSecrets;
 
 namespace ANCBE
 {
@@ -24,14 +26,24 @@ namespace ANCBE
         {
             loggerFactory.AddConsole();
 
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
             if (env.IsDevelopment())
             {
+                builder.AddUserSecrets();
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseExceptionHandler("/home/error");
             }
+
+            builder.AddEnvironmentVariables();
+
+            var config = builder.Build();
 
             app.UseFileServer();
 

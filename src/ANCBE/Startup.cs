@@ -19,6 +19,7 @@ namespace ANCBE
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddScoped<ANCBE.Models.BlogDataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

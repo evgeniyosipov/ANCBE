@@ -1,7 +1,8 @@
-﻿@model ANCBE.Models.Post
+﻿@inject ANCBE.Models.FormattingService Format
+@model ANCBE.Models.Post
 
 <div class="blog-post">
     <h2 class="blog-post-title">@Model.Title</h2>
-    <p class="blog-post-meta">@Model.PostedDate by <a href="/">@Model.Author</a></p>
+    <p class="blog-post-meta">@Format.AsReadableDate(Model.PostedDate) by <a href="/">@Model.Author</a></p>
     @Model.Body
 </div><!-- /.blog-post -->

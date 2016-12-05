@@ -43,12 +43,22 @@ namespace ANCBE.Controllers
             _dataContext.Posts.Add(post);
             await _dataContext.SaveChangesAsync();
 
-            return RedirectToAction("Post", new { id = post.Id });
+            return RedirectToAction("Post", new { post.PostedDate.Year, post.PostedDate.Month, post.Key });
         }
 
         public IActionResult Post(long id)
         {
             Post post = _dataContext.Posts.SingleOrDefault(x => x.Id == id);
+
+            return View(post);
+        }
+
+        [Route("posts/{year:int}/{month:int}/{key}")]
+        public IActionResult Post(int year, int month, string key)
+        {
+            Post post = _dataContext.Posts.SingleOrDefault(
+               x => x.PostedDate.Year == year && x.PostedDate.Month == month
+                    && x.Key == key.ToLower());
 
             return View(post);
         }

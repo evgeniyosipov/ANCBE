@@ -11,29 +11,38 @@ namespace ANCBE.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /<controller>/
-        public IActionResult Index()
+        private readonly BlogDataContext _db;
+
+        public HomeController(BlogDataContext db)
         {
-            var posts = new[] {
-                new Post {
-                    Title = "Blog Post Title #1",
-                    PostedDate = DateTime.Now,
-                    Author = "Evgeniy Osipov",
-                    Body = "Blog post content #1",
-                },
-                new Post {
-                    Title = "Blog Post Title #2",
-                    PostedDate = DateTime.Now,
-                    Author = "Evgeniy Osipov",
-                    Body = "Blog post content #2",
-                },
-                new Post {
-                    Title = "Blog Post Title #3",
-                    PostedDate = DateTime.Now,
-                    Author = "Evgeniy Osipov",
-                    Body = "Blog post content #3",
-                }
-            };
+            _db = db;
+        }
+
+        // GET: /<controller>/
+        public IActionResult Index(int page = 0)
+        {
+            var pageSize = 3;
+            var skip = page * pageSize;
+
+            var posts =
+                _db.Posts
+                    .OrderByDescending(x => x.PostedDate)
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .ToArray();
+
+            var totalPosts = _db.Posts.Count();
+            var totalPages = totalPosts / pageSize;
+            var previousPage = page - 1;
+            var nextPage = page + 1;
+
+            ViewBag.PreviousPage = previousPage;
+            ViewBag.HasPreviousPage = previousPage >= 0;
+            ViewBag.NextPage = nextPage;
+            ViewBag.HasNextPage = nextPage < totalPages;
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView(posts);
 
             return View(posts);
         }

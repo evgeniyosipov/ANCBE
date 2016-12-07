@@ -1,7 +1,4 @@
 ﻿@model ANCBE.Models.Post[]
-@{
-    Layout = "_Layout";
-}
 
 @foreach (var post in Model)
 {
@@ -9,6 +6,23 @@
 }
 
 <nav class="blog-pagination">
-    <a class="btn btn-outline-primary" href="/">Older</a>
-    <a class="btn btn-outline-secondary disabled" href="/">Newer</a>
+
+    @if (ViewBag.HasPreviousPage == true)
+    {
+        <a class="btn btn-outline-primary" href="@Url.Action("Index", new { page = ViewBag.PreviousPage })">Newer</a>
+    }
+    else
+    {
+        <a class="btn btn-outline-secondary disabled" href="/">Newer</a>
+    }
+
+    @if (ViewBag.HasNextPage == true)
+    {
+        <a class="btn btn-outline-primary" href="@Url.Action("Index", new { page = ViewBag.NextPage })">Older</a>
+    }
+    else
+    {
+        <a class="btn btn-outline-secondary disabled" href="/">Older</a>
+    }
+
 </nav>

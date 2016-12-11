@@ -9,7 +9,7 @@ using ANCBE.Models;
 
 namespace ANCBE.Api
 {
-    [Route("api/posts/{postId:long}/comments]")]
+    [Route("api/posts/{postId:long}/comments")]
     public class CommentsController : Controller
     {
         private readonly BlogDataContext _db;

@@ -37,13 +37,13 @@ namespace ANCBE
             {
                 builder.AddUserSecrets();
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
+                //app.UseDatabaseErrorPage();
+                //app.UseBrowserLink();
 
-                //var context = app.ApplicationServices.GetService<Models.BlogDataContext>();
-                //context.Database.EnsureDeleted();
-                //System.Threading.Thread.Sleep(1000);
-                //context.Database.EnsureCreated();
+                var context = app.ApplicationServices.GetService<Models.BlogDataContext>();
+                context.Database.EnsureDeleted();
+                System.Threading.Thread.Sleep(1000);
+                context.Database.EnsureCreated();
             }
             else
             {

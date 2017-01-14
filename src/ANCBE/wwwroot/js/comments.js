@@ -34,22 +34,39 @@ function Post(el) {
         noCommentsEl = postEl.find('.no-comments');
 
 
-    return {
-        addComment: addComment,
-        renderComment: renderComments,
-        showAddComment: showAddComment,
-        showComments: showComments,
-    };
+
+    /*********  Web API Methods ***********/
 
 
-    /*********  Public methods ****************/
+    // RESTful Web API URL:  /api/posts/{postId}/comments
+    var webApiUrl = ['/api/posts', postId, 'comments'].join('/');
+
     function addComment() {
-        var comment = {
-            PostId: postId,
-            Body: commentEl.val(),
-        };
-        PostCommentService.addComment(comment).then(renderComments);
+
+        var comment = { Body: commentEl.val() };
+
+        $.ajax({
+            url: webApiUrl,
+            type: 'POST',
+            data: JSON.stringify(comment),
+            contentType: 'application/json'
+        }).then(renderComments);
+
     }
+
+    function showComments() {
+
+        $.ajax({
+            url: webApiUrl,
+            type: 'GET',
+            contentType: 'application/json'
+        }).then(renderComments);
+
+    }
+
+
+    /****************************************/
+
 
     function showAddComment() {
         addCommentEl.addClass('hide');
@@ -57,10 +74,13 @@ function Post(el) {
         commentEl.focus();
     }
 
-    function showComments() {
-        PostCommentService.getComments(postId).then(renderComments);
-    }
 
+    return {
+        addComment: addComment,
+        renderComment: renderComments,
+        showAddComment: showAddComment,
+        showComments: showComments,
+    };
 
 
     /*********  Private methods ****************/
@@ -74,9 +94,8 @@ function Post(el) {
         return comments.reduce(function (commentEls, comment) {
             var el =
                 $('<div class="comment">')
-                    .data('comment-id', comment.Id)
-                    .append($('<p class="details">').append(comment.Author || 'Anon').append(' at ' + new Date(comment.PostedDate).toLocaleString()))
-                    .append($('<p class="body">').append(comment.Body));
+                    .append($('<p class="details">').append(comment.author || 'Anon').append(' at ' + new Date(comment.posted).toLocaleString()))
+                    .append($('<p class="body">').append(comment.body));
 
             return commentEls.concat(el);
         }, []);
@@ -97,33 +116,3 @@ function Post(el) {
         commentEl.val('');
     }
 }
-
-
-
-var PostCommentService = (
-    function PostCommentService() {
-
-        function call(postId, method, data) {
-            return $.ajax({
-                // RESTful Web API URL:  /api/posts/{postId}/comments
-                url: ['/api/posts', postId, 'comments'].join('/'),
-                type: method,
-                data: JSON.stringify(data),
-                contentType: 'application/json'
-            });
-        }
-
-        return {
-
-            // Add comment by calling URL with POST method and passing data
-            addComment: function (comment) {
-                return call(comment.PostId, 'POST', comment);
-            },
-
-            // Get comments by calling URL with GET method
-            getComments: function (postId) {
-                return call(postId, 'GET');
-            }
-        };
-    })();
-

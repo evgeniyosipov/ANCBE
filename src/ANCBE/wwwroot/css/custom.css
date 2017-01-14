@@ -158,7 +158,9 @@ h6, .h6 {
     font-size: 80%;
     color: #999;
 }
-
+.hide {
+    display: none;
+}
 
 /*
  * Footer

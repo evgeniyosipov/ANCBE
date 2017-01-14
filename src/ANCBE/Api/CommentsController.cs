@@ -39,7 +39,7 @@ namespace ANCBE.Api
         {
             comment.PostId = postId;
             comment.Author = User.Identity.Name;
-            comment.PostedDate = DateTime.Now;
+            comment.Posted = DateTime.Now;
 
             _db.Comments.Add(comment);
             await _db.SaveChangesAsync();

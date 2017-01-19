@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ANCBE
 {
@@ -20,7 +22,18 @@ namespace ANCBE
         {
             services.AddMvc();
             services.AddScoped<ANCBE.Models.BlogDataContext>();
+            services.AddScoped<ANCBE.Models.Identity.IdentityDataContext>();
             services.AddTransient<ANCBE.Models.FormattingService>();
+
+            string identityConnectionString =
+                @"Server=(LocalDb)\MSSQLLocalDb;Database=ANCBE_Identity";
+
+            services.AddEntityFrameworkSqlServer()
+                .AddDbContext<Models.Identity.IdentityDataContext>(dbConfig =>
+                    dbConfig.UseSqlServer(identityConnectionString));
+
+            services.AddIdentity<Models.Identity.ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<Models.Identity.IdentityDataContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +66,8 @@ namespace ANCBE
             builder.AddEnvironmentVariables();
 
             var config = builder.Build();
+
+            app.UseIdentity();
 
             app.UseFileServer();
 

@@ -8,5 +8,9 @@ namespace ANCBE.Models.Identity
 {
     public class IdentityDataContext : IdentityDbContext<ApplicationUser>
     {
+        public IdentityDataContext()
+        {
+            Database.EnsureCreated();
+        }
     }
 }

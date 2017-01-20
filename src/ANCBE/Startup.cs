@@ -57,6 +57,11 @@ namespace ANCBE
                 //context.Database.EnsureDeleted();
                 //System.Threading.Thread.Sleep(1000);
                 //context.Database.EnsureCreated();
+
+                //var contextIdentity = app.ApplicationServices.GetService<Models.Identity.IdentityDataContext>();
+                //context.Database.EnsureDeleted();
+                //System.Threading.Thread.Sleep(1000);
+                //context.Database.EnsureCreated();
             }
             else
             {

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -16,6 +10,24 @@ namespace ANCBE
 {
     public class Startup
     {
+        private readonly IConfigurationRoot config;
+
+        public Startup(IHostingEnvironment env)
+        {
+            var builder = new ConfigurationBuilder()
+                                .AddEnvironmentVariables()
+                                .SetBasePath(env.ContentRootPath)
+                                .AddJsonFile("appsettings.json")
+                                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets();
+            }
+
+            config = builder.Build();
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -25,10 +37,12 @@ namespace ANCBE
             services.AddScoped<ANCBE.Models.Identity.IdentityDataContext>();
             services.AddTransient<ANCBE.Models.FormattingService>();
 
-            string identityConnectionString =
-                @"Server=(LocalDb)\MSSQLLocalDb;Database=ANCBE_Identity";
+            var connectionString = config.GetConnectionString("BlogDataContext");
+            var identityConnectionString = config.GetConnectionString("IdentityDataContext");
 
             services.AddEntityFrameworkSqlServer()
+                .AddDbContext<Models.BlogDataContext>(dbConfig =>
+                    dbConfig.UseSqlServer(connectionString))
                 .AddDbContext<Models.Identity.IdentityDataContext>(dbConfig =>
                     dbConfig.UseSqlServer(identityConnectionString));
 
@@ -41,36 +55,27 @@ namespace ANCBE
         {
             loggerFactory.AddConsole();
 
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
             if (env.IsDevelopment())
             {
-                builder.AddUserSecrets();
                 app.UseDeveloperExceptionPage();
-                //app.UseDatabaseErrorPage();
-                //app.UseBrowserLink();
 
-                //var context = app.ApplicationServices.GetService<Models.BlogDataContext>();
-                //context.Database.EnsureDeleted();
-                //System.Threading.Thread.Sleep(1000);
-                //context.Database.EnsureCreated();
-
-                //var contextIdentity = app.ApplicationServices.GetService<Models.Identity.IdentityDataContext>();
-                //context.Database.EnsureDeleted();
-                //System.Threading.Thread.Sleep(1000);
-                //context.Database.EnsureCreated();
+                if (config.GetValue<bool>("RecreateDatabase:BlogData"))
+                {
+                    var context = app.ApplicationServices.GetService<Models.BlogDataContext>();
+                    context.Database.EnsureDeleted();
+                    context.Database.EnsureCreated();
+                }
+                if (config.GetValue<bool>("RecreateDatabase:IdentityData"))
+                {
+                    var contextIdentity = app.ApplicationServices.GetService<Models.Identity.IdentityDataContext>();
+                    contextIdentity.Database.EnsureDeleted();
+                    contextIdentity.Database.EnsureCreated();
+                }
             }
             else
             {
                 app.UseExceptionHandler("/home/error");
             }
-
-            builder.AddEnvironmentVariables();
-
-            var config = builder.Build();
 
             app.UseIdentity();
 

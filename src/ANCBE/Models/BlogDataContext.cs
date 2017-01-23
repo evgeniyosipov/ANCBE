@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ANCBE.Models
 {
@@ -11,7 +8,8 @@ namespace ANCBE.Models
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Post> Posts { get; set; }
 
-        public BlogDataContext()
+        public BlogDataContext(DbContextOptions<BlogDataContext> options)
+            : base(options)
         {
             Database.EnsureCreated();
         }
@@ -27,13 +25,6 @@ namespace ANCBE.Models
                         Year = group.Key.Year,
                         Month = group.Key.Month,
                     });
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
-        {
-            base.OnConfiguring(optionBuilder);
-            string connectionString = @"Server=(LocalDb)\MSSQLLocalDb;Database=ANCBE";
-            optionBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

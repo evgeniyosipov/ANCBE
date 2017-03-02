@@ -1,4 +1,4 @@
-# ancbe
+# ANCBE
 
 ANCBE - ASP.NET Core Blog Engine (WIP)
 

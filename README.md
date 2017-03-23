@@ -6,4 +6,4 @@ Based on "Up and Running With ASP.NET 5" - https://github.com/jchadwick/UpAndRun
 
 Upgraded and edited to support ASP.NET/.NET Core 1.1
 
-Visual Studio 2015
+Visual Studio 2017
